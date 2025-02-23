@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "Hello" $(date +%Y) # Deliberate ShellCheck error: SC2086
+
 COMMAND="$1"
 shift
 
