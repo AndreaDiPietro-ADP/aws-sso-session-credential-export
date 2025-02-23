@@ -17,7 +17,7 @@ jobs:
       - name: List files in workspace
         run: |
           pwd
-          ls -al test_scripts
+          ls -alh
 
       - name: Run ShellCheck
         uses: reviewdog/action-shellcheck@v1
