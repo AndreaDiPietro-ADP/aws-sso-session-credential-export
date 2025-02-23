@@ -29,10 +29,6 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-#ACCESS_KEY_ID=$(echo "$CREDENTIALS_OUTPUT" | grep "^AccessKeyId:" | sed 's/^AccessKeyId: //; s/,//')
-#SECRET_ACCESS_KEY=$(echo "$CREDENTIALS_OUTPUT" | grep "^SecretAccessKey:" | sed 's/^SecretAccessKey: //; s/,//')
-#SESSION_TOKEN=$(echo "$CREDENTIALS_OUTPUT" | grep "^SessionToken:" | sed 's/^SessionToken: //; s/,//')
-#EXPIRATION=$(echo "$CREDENTIALS_OUTPUT" | grep "^Expiration:" | sed 's/^Expiration: //; s/,//')
 # Parse JSON output using jq
 ACCESS_KEY_ID=$(echo "$CREDENTIALS_OUTPUT" | jq -r '.AccessKeyId')
 SECRET_ACCESS_KEY=$(echo "$CREDENTIALS_OUTPUT" | jq -r '.SecretAccessKey')
@@ -66,13 +62,13 @@ fi
 # Use sed to update or create the profile section
 sed -i "/^\[$PROFILE_SECTION_NAME\]/,/^\[/{
   /^\[$PROFILE_SECTION_NAME\]/b
-  /^aws_access_key_id=/c\aws_access_key_id = $ACCESS_KEY_ID
-  /^aws_secret_access_key=/c\aws_secret_access_key = $SECRET_ACCESS_KEY
-  /^aws_session_token=/c\aws_session_token = $SESSION_TOKEN
+  /^aws_access_key_id=/c\aws_access_key_id=$ACCESS_KEY_ID
+  /^aws_secret_access_key=/c\aws_secret_access_key=$SECRET_ACCESS_KEY
+  /^aws_session_token=/c\aws_session_token=$SESSION_TOKEN
   b
   :end
   }" "$CREDENTIALS_FILE" || {
-    echo "Profile section [$PROFILE_SECTION_NAME] not found, appending to file."
+    echo "INFO: Profile section [$PROFILE_SECTION_NAME] not found, appending to file."
     printf "\n[%s]\naws_access_key_id = %s\naws_secret_access_key = %s\naws_session_token = %s\n" "$PROFILE_SECTION_NAME" "$ACCESS_KEY_ID" "$SECRET_ACCESS_KEY" "$SESSION_TOKEN" >> "$CREDENTIALS_FILE"
   }
 
