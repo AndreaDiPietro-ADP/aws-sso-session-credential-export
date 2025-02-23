@@ -64,7 +64,8 @@ prepare_sso_login_logout_options() {
 }
 
 call_export_sso_session_credentials() {
-  # Prepare options for export credentials
+  # clean the existent cause export goes alway in append a new block mode
+  call_clean_sso_session_credentials
   echo ""
   echo "Performing export of the session credentials wit: $(prepare_export_clean_credentials_options)"
   commands/export_profile_session_into_credentials.sh $(prepare_export_clean_credentials_options)

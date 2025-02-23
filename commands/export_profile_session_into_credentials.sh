@@ -59,18 +59,13 @@ if [ ! -f "$CREDENTIALS_FILE" ]; then
   touch "$CREDENTIALS_FILE"
 fi
 
-# Use sed to update or create the profile section
-sed -i -e '/^\[$PROFILE_SECTION_NAME\]/,/^\[/{
-  /^\[$PROFILE_SECTION_NAME\]/b
-  /^aws_access_key_id=/c\aws_access_key_id=$ACCESS_KEY_ID\
-  /^aws_secret_access_key=/c\aws_secret_access_key=$SECRET_ACCESS_KEY\
-  /^aws_session_token=/c\aws_session_token=$SESSION_TOKEN\
-  b
-  :end
-}' "$CREDENTIALS_FILE" || {
-    echo "INFO: Profile section [$PROFILE_SECTION_NAME] not found, appending to file."
-    printf "\n[%s]\naws_access_key_id=%s\naws_secret_access_key=%s\naws_session_token=%s\n" "$PROFILE_SECTION_NAME" "$ACCESS_KEY_ID" "$SECRET_ACCESS_KEY" "$SESSION_TOKEN" >> "$CREDENTIALS_FILE"
-  }
+# Append new profile section to the end of the credentials file
+echo ""
+echo "Appending new profile section [$PROFILE_SECTION_NAME] to $CREDENTIALS_FILE"
+echo "[$PROFILE_SECTION_NAME]" >> "$CREDENTIALS_FILE"
+echo "aws_access_key_id=$ACCESS_KEY_ID" >> "$CREDENTIALS_FILE"
+echo "aws_secret_access_key=$SECRET_ACCESS_KEY" >> "$CREDENTIALS_FILE"
+echo "aws_session_token=$SESSION_TOKEN" >> "$CREDENTIALS_FILE"
 
 echo ""
 echo "$CREDENTIALS_FILE updated."
