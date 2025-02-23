@@ -21,13 +21,32 @@ print_help() {
   echo "  --export-as-default     Export 'aws_access_key_id', 'aws_secret_access_key', 'aws_session_token' in the  ~/.aws/credentials inside the 'default' profile section instead of the one specified by the --profile option."
 }
 
+AWS_SSO_PROFILE=""
+EXPORT_AS_DEFAULT=false # Flag to track --export-as-default
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --profile)
+      AWS_SSO_PROFILE="$2"
+      shift 2
+      ;;
+    --export-as-default)
+      EXPORT_AS_DEFAULT=true
+      shift 1
+      ;;
+    *)
+      break  # Stop processing options if not recognized
+      ;;
+  esac
+done
+
 # Function to prepare options for export_credentials_profile
 prepare_export_clean_credentials_options() {
   local profile_option=""
   local export_as_default_flag=""
 
   if [[ -n "$AWS_SSO_PROFILE" ]]; then
-    profile_option=" --profile \"$AWS_SSO_PROFILE\" "
+    profile_option=" --profile $AWS_SSO_PROFILE"
   fi
   if [[ "$EXPORT_AS_DEFAULT" == "true" ]]; then
     export_as_default_flag=" --export-as-default"
@@ -39,19 +58,19 @@ prepare_export_clean_credentials_options() {
 prepare_sso_login_logout_options() {
   local profile_option=""
   if [[ -n "$AWS_SSO_PROFILE" ]]; then
-    profile_option=" --profile \"$AWS_SSO_PROFILE\""
+    profile_option=" --profile $AWS_SSO_PROFILE"
   fi
   echo "$profile_option"
 }
 
 call_export_sso_session_credentials() {
   # Prepare options for export credentials
-  echo "Performing export of the session credentials"
+  echo "Performing export of the session credentials wit: $(prepare_export_clean_credentials_options)"
   commands/export_profile_session_into_credentials.sh $(prepare_export_clean_credentials_options)
 }
 
 call_clean_sso_session_credentials() {
-  echo "Performing export of the session credentials"
+  echo "Performing clean of the session credentials with: $(prepare_export_clean_credentials_options)"
   commands/clean_export_profile_session_from_credentials.sh $(prepare_export_clean_credentials_options)
 }
 
@@ -70,7 +89,7 @@ case "$COMMAND" in
   sso-login)
     is_aws_cli_installed
 
-    echo "Performing aws sso login"
+    echo "Performing aws sso login: $(prepare_sso_login_logout_options)"
     aws sso login $(prepare_sso_login_logout_options)
 
     if [ $? -ne 0 ]; then
@@ -88,7 +107,7 @@ case "$COMMAND" in
   sso-logout)
     is_aws_cli_installed
 
-    echo "Performing aws sso logout"
+    echo "Performing: aws sso logout $(prepare_sso_login_logout_options)"
     aws sso logout $(prepare_sso_login_logout_options)
 
     if [ $? -ne 0 ]; then
@@ -120,5 +139,7 @@ case "$COMMAND" in
 esac
 
 unset COMMAND
+unset AWS_SSO_PROFILE
+unset EXPORT_AS_DEFAULT
 
 exit 0

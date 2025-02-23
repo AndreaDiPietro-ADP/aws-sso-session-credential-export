@@ -29,15 +29,21 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-ACCESS_KEY_ID=$(echo "$CREDENTIALS_OUTPUT" | grep "^AccessKeyId:" | sed 's/^AccessKeyId: //; s/,//')
-SECRET_ACCESS_KEY=$(echo "$CREDENTIALS_OUTPUT" | grep "^SecretAccessKey:" | sed 's/^SecretAccessKey: //; s/,//')
-SESSION_TOKEN=$(echo "$CREDENTIALS_OUTPUT" | grep "^SessionToken:" | sed 's/^SessionToken: //; s/,//')
-EXPIRATION=$(echo "$CREDENTIALS_OUTPUT" | grep "^Expiration:" | sed 's/^Expiration: //; s/,//')
+#ACCESS_KEY_ID=$(echo "$CREDENTIALS_OUTPUT" | grep "^AccessKeyId:" | sed 's/^AccessKeyId: //; s/,//')
+#SECRET_ACCESS_KEY=$(echo "$CREDENTIALS_OUTPUT" | grep "^SecretAccessKey:" | sed 's/^SecretAccessKey: //; s/,//')
+#SESSION_TOKEN=$(echo "$CREDENTIALS_OUTPUT" | grep "^SessionToken:" | sed 's/^SessionToken: //; s/,//')
+#EXPIRATION=$(echo "$CREDENTIALS_OUTPUT" | grep "^Expiration:" | sed 's/^Expiration: //; s/,//')
+# Parse JSON output using jq
+ACCESS_KEY_ID=$(echo "$CREDENTIALS_OUTPUT" | jq -r '.AccessKeyId')
+SECRET_ACCESS_KEY=$(echo "$CREDENTIALS_OUTPUT" | jq -r '.SecretAccessKey')
+SESSION_TOKEN=$(echo "$CREDENTIALS_OUTPUT" | jq -r '.SessionToken')
+EXPIRATION=$(echo "$CREDENTIALS_OUTPUT" | jq -r '.Expiration')
 
 
-if [ -z "$ACCESS_KEY_ID" ] || [ -z "$SECRET_ACCESS_KEY" ] || [ -z "$SESSION_TOKEN" ]; then
+if [ -z "$ACCESS_KEY_ID" ] || [ -z "$SECRET_ACCESS_KEY" ] || [ -z "$SESSION_TOKEN" ] || [ -z "$EXPIRATION" ]; then
   echo "Error: Failed to parse credentials from aws configure export-credentials output."
-  echo "Output was:\n$CREDENTIALS_OUTPUT"
+  echo "Output was:"
+  echo "$CREDENTIALS_OUTPUT"
   exit 1
 fi
 
