@@ -1,0 +1,24 @@
+name: ShellCheck
+
+on:
+  push:
+    branches: [ "main", "weekly" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # or a later version if available
+
+      - name: Run ShellCheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          reporter: github-check # Use GitHub Check annotations for results
+          path: | # Specify multiple paths as a multi-line string
+            commands
+            . # Represents the root directory of the repository
+          pattern: "*.sh"
