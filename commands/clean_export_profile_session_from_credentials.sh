@@ -59,7 +59,7 @@ NEXT_SECTION_START_LINE=$(sed -n "/^\[$PROFILE_SECTION_NAME\]/,\$p" "$CREDENTIAL
 # Construct sed command to delete the section
 if [ -n "$NEXT_SECTION_START_LINE" ]; then
   # Delete from the start of the section to the line before the next section
-  SED_COMMAND="sed -i -e \"${SECTION_START_LINE},\\\$((NEXT_SECTION_START_LINE - 1))d\" \"$CREDENTIALS_FILE\""
+  SED_COMMAND="sed -i -e \"${SECTION_START_LINE},\$((NEXT_SECTION_START_LINE - 1))d\" \"$CREDENTIALS_FILE\""
 else
   # Delete from the start of the section to the end of the file
   SED_COMMAND="sed -i -e \"${SECTION_START_LINE},\\\$d\" \"$CREDENTIALS_FILE\""
