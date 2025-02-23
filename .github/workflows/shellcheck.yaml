@@ -14,10 +14,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: List files in workspace
+        run: |
+          pwd
+          ls -al test_scripts
+
       - name: Run ShellCheck
         uses: reviewdog/action-shellcheck@v1
         with:
-          reporter: local
+          reporter: github-check
           path: |
             ./
             commands/
