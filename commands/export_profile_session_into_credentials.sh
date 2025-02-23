@@ -62,9 +62,9 @@ fi
 # Use sed to update or create the profile section
 sed -i -e '/^\[$PROFILE_SECTION_NAME\]/,/^\[/{
   /^\[$PROFILE_SECTION_NAME\]/b
-  /^aws_access_key_id=/c\aws_access_key_id='$ACCESS_KEY_ID'\
-  /^aws_secret_access_key=/c\aws_secret_access_key='$SECRET_ACCESS_KEY'\
-  /^aws_session_token=/c\aws_session_token='$SESSION_TOKEN'\
+  /^aws_access_key_id=/c\aws_access_key_id=$ACCESS_KEY_ID\
+  /^aws_secret_access_key=/c\aws_secret_access_key=$SECRET_ACCESS_KEY\
+  /^aws_session_token=/c\aws_session_token=$SESSION_TOKEN\
   b
   :end
 }' "$CREDENTIALS_FILE" || {
