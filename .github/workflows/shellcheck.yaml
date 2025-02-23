@@ -12,13 +12,15 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # or a later version if available
+        uses: actions/checkout@v4
 
       - name: Run ShellCheck
         uses: reviewdog/action-shellcheck@v1
         with:
-          reporter: github-check # Use GitHub Check annotations for results
-          path: | # Specify multiple paths as a multi-line string
+          # Use GitHub Check annotations for results
+          reporter: github-check
+          # Specify multiple paths as a multi-line string
+          path: | 
             commands
             . # Represents the root directory of the repository
           pattern: "*.sh"
