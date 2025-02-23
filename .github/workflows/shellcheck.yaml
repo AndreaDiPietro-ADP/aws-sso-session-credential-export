@@ -22,6 +22,7 @@ jobs:
           # Specify multiple paths as a multi-line string
           # '.' Represents the root directory of the repository
           path: |
-            .
-            commands
-          pattern: "*.sh"
+            ./
+            commands/
+          pattern: |
+            *.sh
