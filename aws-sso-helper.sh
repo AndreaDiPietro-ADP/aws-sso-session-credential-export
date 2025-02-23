@@ -92,7 +92,7 @@ case "$COMMAND" in
     is_aws_cli_installed
 
     echo ""
-    echo "Performing aws sso login: $(prepare_sso_login_logout_options)"
+    echo "Performing: aws sso login $(prepare_sso_login_logout_options)"
     aws sso login $(prepare_sso_login_logout_options)
 
     if [ $? -ne 0 ]; then

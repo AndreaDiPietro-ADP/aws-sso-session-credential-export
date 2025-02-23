@@ -32,10 +32,11 @@ else
 fi
 
 echo "Cleaning AWS credentials section [$PROFILE_SECTION_NAME] in $CREDENTIALS_FILE"
+echo ""
 
 # Check if credentials file exists
 if [ ! -f "$CREDENTIALS_FILE" ]; then
-  echo "Warning: Credentials file $CREDENTIALS_FILE not found. No cleaning needed."
+  echo "WARNING: Credentials file $CREDENTIALS_FILE not found. No cleaning needed."
   exit 0
 fi
 
@@ -43,7 +44,7 @@ fi
 SECTION_START_LINE=$(grep -n "^\[$PROFILE_SECTION_NAME\]" "$CREDENTIALS_FILE" | cut -d':' -f1)
 
 if [ -z "$SECTION_START_LINE" ]; then
-  echo "Warning: Profile section [$PROFILE_SECTION_NAME] not found in $CREDENTIALS_FILE. No cleaning needed."
+  echo "WARNING: Profile section [$PROFILE_SECTION_NAME] not found in $CREDENTIALS_FILE. No cleaning needed."
   exit 0
 fi
 
@@ -53,17 +54,17 @@ NEXT_SECTION_START_LINE=$(sed -n "/^\[$PROFILE_SECTION_NAME\]/,\$p" "$CREDENTIAL
 # Construct sed command to delete the section
 if [ -n "$NEXT_SECTION_START_LINE" ]; then
   # Delete from the start of the section to the line before the next section
-  SED_COMMAND="sed -i '${SECTION_START_LINE},$(($NEXT_SECTION_START_LINE - 1))d' \"$CREDENTIALS_FILE\""
+  SED_COMMAND="sed -i -e \"${SECTION_START_LINE},\$((NEXT_SECTION_START_LINE - 1))d\" \"$CREDENTIALS_FILE\""
 else
   # Delete from the start of the section to the end of the file
-  SED_COMMAND="sed -i '${SECTION_START_LINE},\$d' \"$CREDENTIALS_FILE\""
+  SED_COMMAND="sed -i -e \"${SECTION_START_LINE},\$d\" \"$CREDENTIALS_FILE\""
 fi
 
 # Execute the sed command
 if eval "$SED_COMMAND"; then
   echo "Successfully cleaned credentials section: [$PROFILE_SECTION_NAME]"
 else
-  echo "Error: Failed to clean credentials section [$PROFILE_SECTION_NAME] in $CREDENTIALS_FILE."
+  echo "ERROR: Failed to clean credentials section [$PROFILE_SECTION_NAME] in $CREDENTIALS_FILE."
   exit 1
 fi
 
