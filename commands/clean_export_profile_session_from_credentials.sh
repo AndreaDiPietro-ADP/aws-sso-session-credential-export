@@ -51,6 +51,11 @@ fi
 # Find the line number of the next section header after the current one
 NEXT_SECTION_START_LINE=$(sed -n "/^\[$PROFILE_SECTION_NAME\]/,\$p" "$CREDENTIALS_FILE" | grep -n "^\[" | tail -n +2 | head -n 1 | cut -d':' -f1)
 
+# Debugging output: Print variable values and constructed SED_COMMAND
+echo "SECTION_START_LINE: $SECTION_START_LINE"
+echo "NEXT_SECTION_START_LINE: $NEXT_SECTION_START_LINE"
+
+
 # Construct sed command to delete the section
 if [ -n "$NEXT_SECTION_START_LINE" ]; then
   # Delete from the start of the section to the line before the next section
@@ -59,6 +64,8 @@ else
   # Delete from the start of the section to the end of the file
   SED_COMMAND="sed -i -e \"${SECTION_START_LINE},\$d\" \"$CREDENTIALS_FILE\""
 fi
+
+echo "SED_COMMAND: $SED_COMMAND" # Debugging output: Print the constructed command
 
 # Execute the sed command
 if eval "$SED_COMMAND"; then
