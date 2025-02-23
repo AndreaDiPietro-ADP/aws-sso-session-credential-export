@@ -17,12 +17,7 @@ jobs:
       - name: Run ShellCheck
         uses: reviewdog/action-shellcheck@v1
         with:
-          # Use GitHub Check annotations for results
           reporter: github-check
-          # Specify multiple paths as a multi-line string
-          # '.' Represents the root directory of the repository
           path: |
             ./
             commands/
-          pattern: |
-            *.sh
