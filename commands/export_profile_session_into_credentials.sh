@@ -72,9 +72,10 @@ sed -i "/^\[$PROFILE_SECTION_NAME\]/,/^\[/{
     printf "\n[%s]\naws_access_key_id = %s\naws_secret_access_key = %s\naws_session_token = %s\n" "$PROFILE_SECTION_NAME" "$ACCESS_KEY_ID" "$SECRET_ACCESS_KEY" "$SESSION_TOKEN" >> "$CREDENTIALS_FILE"
   }
 
-
+echo ""
 echo "$CREDENTIALS_FILE updated."
-echo "Session Expiration: $EXPIRATION"
+echo ""
+echo "Profile [$PROFILE_SECTION_NAME] Session Expiration: $EXPIRATION"
 
 unset AWS_SSO_PROFILE
 unset AWS_SSO_PROFILE_X_COMMAND

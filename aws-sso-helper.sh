@@ -65,11 +65,13 @@ prepare_sso_login_logout_options() {
 
 call_export_sso_session_credentials() {
   # Prepare options for export credentials
+  echo ""
   echo "Performing export of the session credentials wit: $(prepare_export_clean_credentials_options)"
   commands/export_profile_session_into_credentials.sh $(prepare_export_clean_credentials_options)
 }
 
 call_clean_sso_session_credentials() {
+  echo ""
   echo "Performing clean of the session credentials with: $(prepare_export_clean_credentials_options)"
   commands/clean_export_profile_session_from_credentials.sh $(prepare_export_clean_credentials_options)
 }
@@ -89,11 +91,12 @@ case "$COMMAND" in
   sso-login)
     is_aws_cli_installed
 
+    echo ""
     echo "Performing aws sso login: $(prepare_sso_login_logout_options)"
     aws sso login $(prepare_sso_login_logout_options)
 
     if [ $? -ne 0 ]; then
-      echo "Error: aws sso login command failed."
+      echo "  Error: aws sso login command failed."
       exit 1
     fi
 
@@ -107,20 +110,23 @@ case "$COMMAND" in
   sso-logout)
     is_aws_cli_installed
 
+    echo ""
     echo "Performing: aws sso logout $(prepare_sso_login_logout_options)"
     aws sso logout $(prepare_sso_login_logout_options)
 
     if [ $? -ne 0 ]; then
-      echo "Error: aws sso logout command failed."
+      echo "  Error: aws sso logout command failed."
       exit 1
     fi
 
+    echo ""
     echo "Performing cleaning of the session credentials"
     call_clean_sso_session_credentials
     ;;
   clean-session-credentials)
     is_aws_cli_installed
 
+    echo ""
     echo "Performing cleaning of the session credentials"
     call_clean_sso_session_credentials
     ;;
