@@ -49,7 +49,9 @@ if [ -z "$SECTION_START_LINE" ]; then
 fi
 
 # Find the line number of the next section header after the current one
-NEXT_SECTION_START_LINE=$(sed -n "/^\[$PROFILE_SECTION_NAME\]/,\$p" "$CREDENTIALS_FILE" | grep -n "^\[" | tail -n +2 | head -n 1 | cut -d':' -f1)
+NEXT_SECTION_START_LINE=$(awk -v start_line="$SECTION_START_LINE" '
+  NR > start_line && /^\[[^]]*\]/ { print NR; exit }
+' "$CREDENTIALS_FILE")
 
 # Debugging output: Print variable values and constructed SED_COMMAND
 # echo "SECTION_START_LINE: $SECTION_START_LINE"

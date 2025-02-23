@@ -9,6 +9,10 @@ This bash script provides a helper tool to simplify working with AWS Single Sign
 *   **AWS CLI v2:**  You must have the AWS Command Line Interface version 2 (AWS CLI v2) installed. You can find installation instructions in the [AWS CLI documentation](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
 *   **AWS CLI `sso` plugin configured:** Your AWS CLI must be configured to use AWS SSO. You should have run `aws configure sso` at least once to set up your SSO configuration.  Refer to the [AWS CLI documentation on configuring SSO](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html) for details.
 *   **`jq` command-line JSON processor:** The script uses `jq` to parse JSON output from the AWS CLI. You need to have `jq` installed on your system.  You can find installation instructions for your operating system on the [jq website](https://stedolan.github.io/jq/).  For example, on macOS (using Homebrew) and many Linux distributions, you can typically install it with: `brew install jq` or `sudo apt-get install jq` / `sudo yum install jq`.
+*   **awk:**  A powerful text processing utility. `awk` is used in the `clean-session-credentials.sh` script to efficiently find and remove sections from the AWS credentials file.  `awk` is a standard utility on most Unix-like operating systems (Linux, macOS).
+
+**Note:**  `awk` is typically pre-installed on Linux and macOS systems. You likely do not need to install it separately. However, if you are using a minimal environment or encounter issues, you may need to ensure `awk` is available in your system's PATH.
+
 
 
 ## Commands
