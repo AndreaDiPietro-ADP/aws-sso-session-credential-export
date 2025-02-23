@@ -14,6 +14,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Create a test script with an error
+        run: |
+          mkdir -p test_scripts
+          cat <<EOF > test_scripts/test_script.sh
+          #!/bin/sh
+          echo "Hello" $(date +%Y) # Deliberate ShellCheck error: SC2086 - command substitution within double quotes
+          EOF
+
       - name: Run ShellCheck
         uses: reviewdog/action-shellcheck@v1
         with:
