@@ -20,7 +20,8 @@ jobs:
           # Use GitHub Check annotations for results
           reporter: github-check
           # Specify multiple paths as a multi-line string
+          # '.' Represents the root directory of the repository
           path: | 
             commands
-            . # Represents the root directory of the repository
+            .
           pattern: "*.sh"
