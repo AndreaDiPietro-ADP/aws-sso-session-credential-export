@@ -18,11 +18,13 @@ print_help() {
   echo ""
   echo "Options for sso-login, export-credentials, sso-logout, and clean-credentials:"
   echo "  --profile <profile_name>  Specify the AWS SSO profile to be used for retrieving the session access or for the logout."
-  echo "  --export-as-default     Export 'aws_access_key_id', 'aws_secret_access_key', 'aws_session_token' in the  ~/.aws/credentials inside the 'default' profile section instead of the one specified by the --profile option."
+  echo "  --export-as-default       Export 'aws_access_key_id', 'aws_secret_access_key', 'aws_session_token' in the  ~/.aws/credentials inside the 'default' profile section instead of the one specified by the --profile option."
+  echo "  --export-with-region <region>  Export the credentials with the specified region."
 }
 
 AWS_SSO_PROFILE=""
 EXPORT_AS_DEFAULT=false # Flag to track --export-as-default
+EXPORT_REGION=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -34,6 +36,10 @@ while [[ $# -gt 0 ]]; do
       EXPORT_AS_DEFAULT=true
       shift 1
       ;;
+    --export-with-region)
+      EXPORT_REGION="$2"
+      shift 2
+      ;;
     *)
       break  # Stop processing options if not recognized
       ;;
@@ -44,6 +50,7 @@ done
 prepare_export_clean_credentials_options() {
   local profile_option=""
   local export_as_default_flag=""
+  local export_with_region_flag=""
 
   if [[ -n "$AWS_SSO_PROFILE" ]]; then
     profile_option=" --profile $AWS_SSO_PROFILE"
@@ -51,7 +58,10 @@ prepare_export_clean_credentials_options() {
   if [[ "$EXPORT_AS_DEFAULT" == "true" ]]; then
     export_as_default_flag=" --export-as-default"
   fi
-  echo "$profile_option $export_as_default_flag"
+  if [[ -n "$EXPORT_REGION" ]]; then
+    export_with_region_flag=" --export-with-region $EXPORT_REGION"
+  fi
+  echo "$profile_option $export_as_default_flag $export_with_region_flag"
 }
 
 # Function to prepare options for aws sso login
@@ -148,5 +158,6 @@ esac
 unset COMMAND
 unset AWS_SSO_PROFILE
 unset EXPORT_AS_DEFAULT
+unset EXPORT_REGION
 
 exit 0
