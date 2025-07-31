@@ -4,6 +4,7 @@ AWS_SSO_PROFILE=""
 AWS_SSO_PROFILE_X_COMMAND=""
 PROFILE_SECTION_NAME="" # Initialize PROFILE_SECTION_NAME
 EXPORT_AS_DEFAULT=false # Flag to track --export-as-default
+EXPORT_REGION=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -15,6 +16,10 @@ while [[ $# -gt 0 ]]; do
     --export-as-default)
       EXPORT_AS_DEFAULT=true
       shift 1
+      ;;
+    --export-with-region)
+      EXPORT_REGION="$2"
+      shift 2
       ;;
     *)
       break  # Stop processing options if not recognized
@@ -66,6 +71,9 @@ echo "[$PROFILE_SECTION_NAME]" >> "$CREDENTIALS_FILE"
 echo "aws_access_key_id=$ACCESS_KEY_ID" >> "$CREDENTIALS_FILE"
 echo "aws_secret_access_key=$SECRET_ACCESS_KEY" >> "$CREDENTIALS_FILE"
 echo "aws_session_token=$SESSION_TOKEN" >> "$CREDENTIALS_FILE"
+if [[ -n "$EXPORT_REGION" ]]; then
+  echo "region=$EXPORT_REGION" >> "$CREDENTIALS_FILE"
+fi
 
 echo ""
 echo "$CREDENTIALS_FILE updated."
@@ -76,6 +84,7 @@ unset AWS_SSO_PROFILE
 unset AWS_SSO_PROFILE_X_COMMAND
 unset PROFILE_SECTION_NAME
 unset EXPORT_AS_DEFAULT
+unset EXPORT_REGION
 unset CREDENTIALS_OUTPUT
 unset ACCESS_KEY_ID
 unset SECRET_ACCESS_KEY

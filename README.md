@@ -31,7 +31,8 @@ This script provides the following commands:
     *   Usage: `aws-sso-helper sso-login [options]`
     *   Options:
         *   `--profile <profile_name>`:  Specify the AWS SSO profile to use for login and credential export. If not provided, it will use the default SSO profile configured in your AWS CLI.
-        *   `--export-as-default`: Exports the session credentials into the `[default]` profile section of your `~/.aws/credentials` file, instead of the section named after the SSO profile, it should be usedd in combo with `--profile <profile_name>`.
+        *   `--export-as-default`: Exports the session credentials into the `[default]` profile section of your `~/.aws/credentials` file, instead of the section named after the SSO profile. This should be used in combination with `--profile <profile_name>`.
+        *   `--export-with-region <region>`: Exports the credentials along with the specified AWS region, adding a `region = <region>` line to the profile. Ex: ` --export-with-region us-east-1`. This is useful if you want to set a default region for the SSO profile in your credentials file.
 
 *   **`export-session-credentials`**:
 
@@ -39,7 +40,9 @@ This script provides the following commands:
     *   Usage: `aws-sso-helper export-session-credentials [options]`
     *   Options:
         *   `--profile <profile_name>`:  Specify the AWS SSO profile to export credentials from. If not provided, it will attempt to use the default SSO profile.
-        *   `--export-as-default`: Exports the session credentials into the `[default]` profile section of your `~/.aws/credentials` file it should be usedd in combo with `--profile <profile_name>`.
+        *   `--export-as-default`: Exports the session credentials into the `[default]` profile section of your `~/.aws/credentials` file. This should be used in combination with `--profile <profile_name>`.
+        *   `--export-with-region <region>`: Exports the credentials along with the specified AWS region. For more details see the `sso-login` command.
+
 
 *   **`sso-logout`**:
 
